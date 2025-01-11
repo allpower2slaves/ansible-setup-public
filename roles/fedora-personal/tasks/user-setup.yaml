@@ -15,6 +15,8 @@
     groups:
       - family
     append: yes
+  tags:
+    - never
 
 - name: create a non-CoW directory for Steam games outside of ~/
   file:
@@ -24,6 +26,8 @@
     state: directory
     owner: "{{ main_user }}"
     group: family
+  tags:
+    - never
 
 # system-level setup part ends here
 
