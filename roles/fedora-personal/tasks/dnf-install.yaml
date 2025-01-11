@@ -206,3 +206,5 @@
       - neofetch  # absent from f41, not maintained, slow
     state:
       absent
+  tags:
+    - remove

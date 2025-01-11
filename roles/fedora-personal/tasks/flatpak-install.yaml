@@ -27,3 +27,12 @@
   tags:
     - flatpak
     - flathub
+
+- name: remove Flatpak applications
+  community.general.flatpak:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - org.kde.konsole # goodbye my old friend...
+  tags:
+    - remove

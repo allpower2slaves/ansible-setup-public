@@ -97,6 +97,7 @@ media.
 | nonfree      | non-free software (currently unused)           |
 | personal     | custom setup :)                                |
 | latex        | latex setup (will download 5+ GB)              |
+| remove       | remove files/uninstall packages                |
 | ------------ | ---------------------------------------------- |
 | interactive  | interactive tasks                              |
 | experimental | experimental stuff, use it at your own risk    |
