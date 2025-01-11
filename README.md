@@ -1,8 +1,13 @@
 # hello world
-My personal ~~Fedora set up~~ Ansible playbook. 
+My personal ~~Fedora set up~~ Ansible-related repository. 
+
+This is a open and stripped version (fork?, variant?) of my private Ansible-related
+repository. Do not expect working playbooks and comprehensible commit history :).
+
+Feel free to reuse parts of this repo. Any feedback would be welcome. :)
 
 # Dependencies
-I had these packages installed to host and execute this playbook:
+I had these packages installed on my host:
 + `ansible-collection-community-general-8.4.0-1.fc40.noarch`
 + `ansible-core-2.16.12-1.fc40.noarch`
 + `ansible-9.11.0-1.fc40.noarch`
