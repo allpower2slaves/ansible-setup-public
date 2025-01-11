@@ -1,0 +1,48 @@
+---
+# tasklist with different hacks and setups
+- name: EXPERIMENTAL -- Copy drop-in ssh config
+  copy:
+    src: openssh-fedora-workstation.conf
+    dest: /etc/ssh/sshd_config.d/06-ansible-fedora-workstation.conf
+    backup: false
+    force: true
+    mode: "0600"
+  tags:
+    - ssh
+    - experimental
+    - never # because its experimental :)
+  notify: restart sshd
+
+- block:
+    - name: change GNOME system-level default settings
+      copy:
+        src: gnome-system.dconf
+        dest: /etc/dconf/db/local.d/12-gnome-custom.dconf # why twelve tho
+        mode: '0644'
+        backup: no
+        # maybe a gnome tag here....
+      register: dconf_update # maybe do a notifier here?
+
+    - name: update dconf (should be a handler i think :))
+      command:
+        cmd: dconf update
+      when: dconf_update.changed
+
+- name: enable networkmanager opportunistic dns over tls
+  ansible.builtin.copy:
+    src: networkmanager-dot.conf
+    dest: /etc/NetworkManager/conf.d/90-dnf-over-tls.conf
+    mode: '0644'
+    backup: no
+  tags:
+    - security
+
+- name: fix IBM SpaceSaver II scrolling on Wayland # experimental!!
+  copy:
+    src: ibm-spacesaver-ii-scrolling.rules
+    dest: /etc/udev/rules.d/12-ibm-spacesaver-ii-scrolling.rules
+    mode: '0644'
+    backup: no
+  notify: reload udev
+  tags:
+    - experimental    # i enable it because it shouldnt break anything...

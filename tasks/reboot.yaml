@@ -1,0 +1,17 @@
+---
+# WARNING: REQUIRES running service_fact: for collecting service facts
+
+- name: literal reboot
+  reboot:
+    msg: "Ansible will reconnect in {{reboot_timeout }} seconds"
+    reboot_timeout: "{{ reboot_timeout }}"
+  when:
+    - services['sshd.service'].status == "enabled"
+    - ansible_connection != "local"
+  tags:
+    - reboot
+  register: rebooted
+
+- debug:
+   msg: "reboot was skipped, you are advised to reboot the system yourself :)"
+  when: rebooted.skipped | default(false)

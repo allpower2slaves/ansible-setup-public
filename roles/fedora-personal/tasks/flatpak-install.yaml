@@ -1,0 +1,29 @@
+---
+# hello world
+
+- name: install Flatpak applications
+  community.general.flatpak:
+    name: "{{ item }}"
+    state: present
+    method: system
+    remote: flathub
+  loop:
+      - com.github.neithern.g4music
+      - com.github.tchx84.Flatseal
+      - com.mattjakeman.ExtensionManager
+      - com.valvesoftware.Steam
+      - im.riot.Riot
+      - io.github.ungoogled_software.ungoogled_chromium
+      - org.kde.krita
+      - org.kde.okular
+      - org.keepassxc.KeePassXC
+      - org.prismlauncher.PrismLauncher
+      - org.qbittorrent.qBittorrent
+      - org.telegram.desktop
+      - com.github.johnfactotum.Foliate
+      - org.nomacs.ImageLounge
+      - io.gitlab.librewolf-community
+      - tagscom.github.PintaProject.Pinta
+  tags:
+    - flatpak
+    - flathub

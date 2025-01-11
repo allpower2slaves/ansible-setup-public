@@ -1,0 +1,4 @@
+hardware_setup: true      # if true, it will install codecs and drivers
+force_nvidia: false       # if true, it will install nvidia drivers no matter what
+
+# TODO: enable\disable rpmfusion repos?

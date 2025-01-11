@@ -1,0 +1,9 @@
+- name: Commence reboot if possible
+  reboot:
+    post_reboot_delay: "{{ reboot_timer }}"
+  throttle: 1
+  when:
+    - services['sshd.service'].status == "enabled" # services are first indexed by main.yaml
+    - ansible_connection != "local"
+  tags:
+    - reboot

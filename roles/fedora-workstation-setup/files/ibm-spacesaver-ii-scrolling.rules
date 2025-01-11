@@ -1,0 +1,1 @@
+ACTION=="add|change", ENV{ID_VENDOR_ID}=="0d3d", ATTRS{name}=="*USBPS2 Mouse*", ENV{ID_INPUT_POINTINGSTICK}="1"

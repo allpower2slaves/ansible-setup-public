@@ -1,0 +1,208 @@
+---
+# list of packages to install and other dnf stuff
+
+- name: install storage utilites
+  dnf:
+    name:
+    - smartmontools
+    - scrub
+    - hdparm
+    - testdisk
+    - ecryptfs-utils
+    - ddrescue
+    state: present
+
+- name: cmdline and system utilites
+  dnf:
+    name:
+    - vifm
+    - ncdu
+    - moreutils
+    - renameutils
+    - zstd
+    - bsdtar
+    - busybox
+    - tree
+    - rsync
+    - htop
+    - android-tools
+    - lm_sensors
+    - xev
+    - wev
+    - steam-devices
+    - xdelta
+    - xsel
+    - wl-clipboard
+    - openssl
+    - axel
+    - monitor-edid 
+    - edid-decode
+    state: present
+
+- name: development stuff
+  dnf:
+    name:
+      - gcc
+      - bandit
+    state: present
+
+- name: GUI utilites (mostly GNOME)
+  dnf:
+    name:
+    - wireshark
+    - file-roller
+    - dconf-editor
+    - gnome-tweaks
+    - pdfarranger
+    - file-roller-nautilus
+    - ghex
+
+- name: network tools
+  dnf:
+    name:
+      - nmap
+      - whois
+      - ngrep
+    state: present
+
+- name: multimedia packages
+  dnf:
+    name:
+      - celluloid
+      - obs-studio
+      - yt-dlp
+    state: present
+
+- name: dnf stuff
+  dnf:
+    name:
+      - yum-utils
+    state: present
+
+- name: documentation packages
+  dnf:
+    name:
+      - man-pages-posix
+    state: present
+
+- name: fancy stuff
+  dnf:
+    name:
+      - lolcat
+      - fastfetch
+      - vrms-rpm
+      - rbanffy-3270-fonts
+    state: present
+
+# do i really need git-lfs?
+
+- name: git stuff
+  dnf:
+    name:
+      - git
+      - git-lfs
+      - gh
+    state: present
+
+- name: shells
+  dnf:
+    name:
+      - fish
+      - dash
+    state: present
+
+- name: text editor
+  dnf:
+    name:
+      - neovim
+      - vim
+    state: present
+
+- name: containers
+  dnf:
+    name:
+      - podman
+      - podman-compose
+      - distrobox
+    state: present
+  tags:
+    - podman
+
+- name: virtualization
+  dnf:
+    name:
+      - virt-install
+      - guestfs-tools
+      - libvirt
+      - virt-manager
+      - virt-install
+      #- VirtualBox
+    state: present
+  tags:
+    - virtualization
+
+- name: ansible
+  dnf:
+    name:
+      - ansible
+      - ansible-collection-community-general
+
+- name: fedora backgrounds
+  dnf:
+    name:
+      - f32-backgrounds-gnome
+      - f33-backgrounds-gnome
+      - f34-backgrounds-gnome
+      - f37-backgrounds-gnome
+    state: present
+
+- name: install legacy dnf4 if its fedora 41 and latter
+  when: ansible_facts['distribution_major_version'] | int > 40
+  dnf:
+    name:
+      - dnf4
+    state: present
+
+- name: swap nano with vim as default editor # i think this will even remove nano :)
+  shell: |
+    dnf swap -y nano-default-editor vim-default-editor
+  register: editor_swap
+  changed_when: "'Nothing to do.' not in editor_swap.stdout"
+
+- block: # install ghostty from copr
+  - name: Enable Fedora copr for ghostty
+    community.general.copr:
+      name: pgdev/ghostty
+      state: enabled
+  
+  - name: install ghostty
+    dnf:
+      name: ghostty
+      state: present
+
+# tags:
+#   - copr
+
+
+- name: add main user to new groups
+  user:
+    #uid: 1000
+    name: "{{ main_user }}"
+    groups:
+      - wireshark
+      - libvirt
+      #- vboxusers
+    append: yes
+
+- name: start enable libvirtd service
+  systemd:
+    name: libvirtd
+    state: started
+    enabled: true
+
+- name: package removal
+  dnf:
+    name:
+      - neofetch  # absent from f41, not maintained, slow
+    state:
+      absent

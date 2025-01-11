@@ -1,0 +1,19 @@
+---
+- name: install RPMFusion repository
+  import_tasks:
+    file: rpmfusion-setup.yaml
+  tags:
+    #- nonfree
+    - rpmfusion
+    - postinstall
+    - dnf
+
+- name: install codecs and drivers
+  import_tasks:
+    file: codecs-and-drivers.yaml
+  when: hardware_setup
+  notify: reboot            # the better solution would be to tag only codec installations but im lazy
+  tags:
+    - postinstall
+    - dnf
+    - gpu

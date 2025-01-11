@@ -1,0 +1,8 @@
+---
+dependencies:
+  - role: fedora-postinstall
+    when: not skip_dependencies
+  - role: flathub-setup
+    vars:
+      flathub_enable: true
+    when: not skip_dependencies

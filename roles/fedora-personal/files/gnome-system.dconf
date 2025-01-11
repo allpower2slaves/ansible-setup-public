@@ -1,0 +1,10 @@
+[org/gnome/software]
+download-updates=false
+first-run=false
+
+[org/gnome/desktop/input-sources]
+mru-sources=[('xkb', 'us'), ('xkb', 'ru')]
+sources=[('xkb', 'us'), ('xkb', 'ru')]
+
+[org/gnome/desktop/privacy]
+report-technical-problems=false

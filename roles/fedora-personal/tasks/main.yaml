@@ -1,0 +1,39 @@
+---
+# Main task
+#- name: collect facts about system services :) #originally was used for checking sshd for dnf reboot
+#service_facts:
+
+# these two are separate because
+# its easier to edit multiple lists of packages
+# rather than one big messy file
+
+- import_tasks:  # dnf packages
+    file: dnf-install.yaml
+  when: install_packages
+  tags:
+    - dnf
+    - personal
+
+- import_tasks:
+    file: flatpak-install.yaml
+  when: install_flatpaks
+  tags:
+    - flathub # i mean...
+    - flatpak
+    - personal
+
+- import_tasks: # apply my hacks
+    file: iamcrazy.yaml
+  when: apply_nifty_hacks
+  tags:
+    - experimental # duh...
+    - personal
+
+- import_tasks:
+    file: user-setup.yaml
+  when: setup_home
+  tags:
+    - home
+    - personal
+
+    # after running this, i highly recommend to run a reboot :)

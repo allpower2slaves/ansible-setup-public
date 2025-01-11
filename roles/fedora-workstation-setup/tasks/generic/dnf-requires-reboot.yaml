@@ -1,0 +1,22 @@
+- name: Reboot required check
+  command: 'sudo dnf needs-restarting -r'
+  register: dnf_upgrade_reboot_required
+  ignore_errors: True
+  changed_when: False
+  failed_when:  dnf_upgrade_reboot_required.rc == 2
+  tags:
+    - dnf
+    #- reboot
+
+- block:
+  - debug:
+      msg: "dnf reboot required!"
+    tags:
+      - dnf
+
+  - import_tasks:
+      file: generic/reboot.yaml
+    tags:
+      - reboot
+      #- dnf
+  when: dnf_upgrade_reboot_required.rc|default(0) == 1 # because it will fail when running in check mode

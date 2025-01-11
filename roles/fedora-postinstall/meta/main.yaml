@@ -1,0 +1,10 @@
+---
+#dependencies:
+#  - role: dnf-upgrade
+#    vars:
+#      dnf_reboot_force: true # idk.... nvidia install needs it but whatever
+#    tags:
+#      - upgrade
+
+# why i disabled it? it looks\feels like upgrading kernel for nvidia driver
+# installation is not really a requirement

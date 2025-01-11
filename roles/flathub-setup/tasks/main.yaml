@@ -1,0 +1,25 @@
+---
+- name: ensure that flatpak package is installed
+  package:
+    name:
+      - flatpak
+    state: present
+  tags:
+    - dnf # i mean, it actually cross-platform
+    - flatpak # im not sure about that...
+
+- name: Add the flathub flatpak repository remote to the system installation
+  community.general.flatpak_remote:
+    name: flathub
+    flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+    method: system
+    state: present
+  tags:
+    - flatpak
+    - flathub
+
+- name: Enable or disable flathub remote
+  community.general.flatpak_remote:
+    name: flathub
+    state: present
+    enabled: "{{ flathub_enable | bool }}"

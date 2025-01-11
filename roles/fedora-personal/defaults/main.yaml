@@ -1,0 +1,6 @@
+apply_nifty_hacks: true # if false -- skip setting up DoT, sshd, GNOME and much more...
+install_packages: true  # dont install rpm packages
+install_flatpaks: true # i mean... they eat a lot of bandwith
+setup_home: true # if false, dont manage groups and other user configs
+main_user: sehnsucht # username of a user that setup right after Fedora Workstation install (or during install)
+skip_dependencies: false # if true, ignore dependencies (like flathub repository, etc etc)
