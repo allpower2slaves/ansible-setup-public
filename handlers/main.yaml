@@ -1,0 +1,3 @@
+- name: reboot
+  include_tasks:
+    file: tasks/reboot.yaml
