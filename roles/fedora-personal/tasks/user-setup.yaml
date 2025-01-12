@@ -1,24 +1,5 @@
-# first block -- create users and manage them on system level
-# latter blocks -- user-local configuration with `become:`
 # DO NOT tag anything with "personal" because it inherits this tag
 # also same applies to "home" tag. dont tag it :)
- 
-- name: create family group
-  group:
-    name: family
-    state: present
-    gid: 1100         # i dont want to bother with uid-gid collision :)
-
-- name: add main user to family group
-  user:
-    name: "{{ main_user }}"
-    groups:
-      - family
-    append: yes
-  tags:
-    - never
-
-# system-level setup part ends here
 
 - name: manage my user-local configuration :)
   become_user: "{{ main_user }}"
@@ -84,6 +65,14 @@
         - fish
         - ghostty
 
+    - name: (dirty) apply generic cross-system GNOME settings # its not idempotent!!
+      shell:
+        cmd: |
+          dconf load / < ~/Desktop/github/dotfiles/gnome-setup.dconf
+      when: apply_dconf
+      tags:
+        - experimental
+
     - name: Make fedora-based texlive container for distrobox # maybe i should switch to alpine?
       containers.podman.podman_image:
         state: build
@@ -97,35 +86,5 @@
       tags:
         - podman
         - latex # do i even need this tag at all
+
 # end of block
-
-
-# coulda use templates but whatever :)
-# todo: fix the # ANSIBLE marker blocks
-# btw SELinux attrs are ok :)
-# btw the file would be clean from #ANSIBLE blocks when you change it (for
-# example, changing the user picture)
-- name: change language to Russian for nonexisting user 
-  tags: [ never, testing ]
-  blockinfile:
-    backup: false
-    create: true
-    append_newline: false
-    prepend_newline: false
-    mode: "0644" # for some reason GNOME sets it to 0644, yet the file for first user is "0600"
-    owner: root
-    path: /var/lib/AccountsService/users/ivan
-    block: |
-      [User]
-      Languages=ru_RU.UTF-8;
-
-- name: manage placeholder user that doesnt exist
-  become_user: "testing"
-  tags: [ never, testing ]
-  block:
-    - name: set GNOME dark style
-      community.general.dconf:
-        key: "/org/gnome/desktop/interface/color-scheme"
-        value: "prefer-dark"
-        state: present
-      ignore_errors: true # because it might fail in a weird way
