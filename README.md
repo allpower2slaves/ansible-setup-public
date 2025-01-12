@@ -75,6 +75,8 @@ media.
 + `hardware-setup` -- install GPU-related software (drivers, codecs). *comes
   with NVIDIA proprietary drivers and appications* (defaults to `true`)
 + `force-nvidia` -- install NVIDIA-related packages even when not needed.
++ `kefir` -- install additional packages like `python3-psutil` and other
+  libraries (defaults to `true`)
 
 ## Tags
 

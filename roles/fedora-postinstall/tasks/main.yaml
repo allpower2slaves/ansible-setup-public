@@ -17,3 +17,10 @@
     - postinstall
     - dnf
     - gpu
+
+- name: install psutil library for ansible
+  dnf:
+    name: python3-psutil
+    state: present
+  when: kefir
+
