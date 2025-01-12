@@ -34,8 +34,7 @@
     - xsel
     - wl-clipboard
     - openssl
-    - axel
-    - monitor-edid 
+    - monitor-edid
     - edid-decode
     state: present
 
