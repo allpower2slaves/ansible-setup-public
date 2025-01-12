@@ -50,6 +50,19 @@ Might not work correctly.
 ## Generic roles
 Roles for basic tasks like upgrading packages, rebooting, installing drivers.
 
+### zypper-up
+Upgrade your system with `zypper` package manager.
+
+#### Variables
++ `allow_vendor_change` -- allow vendor change when upgrading packages.
+  (defaults to `true`)
++ `zypper_up` -- if set to `false`, the role will only check for reboot necessity. 
+  (defaults to `true`)
++ `no_recommends` -- if `true`, dont install recommended packages. (defaults to `false`)
++ `reboot_force` -- if reboot is necessary, flush all handlers  (defaults to `false`)
++ `dist_upgrade` -- if `true` run `zypper dup` and not `zypper up`. *NOTE:
+  OpenSUSE Tumbleweed cant be upgraded with `zypper up`* (defaults to `true`)
+
 
 ### dnf-upgrade
 Role for stuff that is related to `dnf` package manager system upgrade process.  

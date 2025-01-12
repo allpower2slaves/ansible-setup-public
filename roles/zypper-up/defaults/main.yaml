@@ -1,0 +1,5 @@
+allow_vendor_change: true # if true, literally allow vendor change
+zypper_up: true # actually run the upgrade
+no_recommends: false # if true, dont install recommended packages
+reboot_force: false # flush all notifiers
+dist_upgrade: true # if true perform dist_upgrade (i mean, its for tumbleweed)

@@ -1,0 +1,40 @@
+---
+- name: Upgrade the system (dist-upgrade)
+  zypper:
+    name: "*"
+    state: dist-upgrade
+    allow_vendor_change: "{{ allow_vendor_change | bool }}"
+    disable_recommends: "{{ no_recommends | bool }}"
+  when: zypper_up and dist_upgrade
+  tags:
+    - zypper # to be changed to pkg or rpm
+    - upgrade
+
+- name: Upgrade the system (not dist-upgrade)
+  zypper:
+    name: "*"
+    state: latest
+    allow_vendor_change: "{{ allow_vendor_change | bool }}"
+    disable_recommends: "{{ no_recommends | bool }}"
+  when: zypper_up and not dist_upgrade
+  tags:
+    - zypper # to be changed to pkg or rpm
+    - upgrade
+
+- name: Check if reboot required
+  shell:
+    cmd: zypper needs-rebooting; zypper ps -s
+  register: zypper_upgrade_reboot_required
+  ignore_errors: true
+  changed_when: ('Reboot is suggested' in zypper_upgrade_reboot_required.stdout or 'You may wish to restart these processes' in zypper_upgrade_reboot_required.stdout)
+  failed_when: false
+  tags:
+    - zypper
+    - reboot
+  notify: "reboot"
+
+- name: Force flush
+  meta: flush_handlers
+  when: reboot_force
+  tags:
+    - reboot
