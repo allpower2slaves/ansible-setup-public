@@ -2,7 +2,7 @@
 #dependencies:
 #  - role: dnf-upgrade
 #    vars:
-#      dnf_reboot_force: true # idk.... nvidia install needs it but whatever
+#      reboot_force: true # idk.... nvidia install needs it but whatever
 #    tags:
 #      - upgrade
 
