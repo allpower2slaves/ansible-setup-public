@@ -17,10 +17,10 @@
   tags:
     - dnf
     - reboot
-  notify: "reboot the system"
+  notify: "reboot"
 
 - name: Force flush
   meta: flush_handlers
-  when: dnf_reboot_force
+  when: reboot_force
   tags:
     - reboot

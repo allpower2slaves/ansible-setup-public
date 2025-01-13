@@ -70,7 +70,7 @@ Role for stuff that is related to `dnf` package manager system upgrade process.
 #### Variables
 + `dnf_upgrade` -- run `dnf upgrade`. If set to `false` the role will skip
   upgrade process and check for reboot necessity.  (defaults to `true`)
-+ `dnf_reboot_force` -- if reboot is necessary, flush all handlers (including
++ `reboot_force` -- if reboot is necessary, flush all handlers (including
   `reboot` reboot) (defaults to `false`)
 
 ### flathub-setup

@@ -1,3 +1,3 @@
 dnf_upgrade: true # actually run dnf upgrade
-dnf_reboot_force: false # flush all notifiers
+reboot_force: false # flush all notifiers
 reboot_timeout: 180 # should be globally set...
