@@ -1,0 +1,37 @@
+---
+- name: install sudo-related packages
+  zypper:
+    name:
+      - sudo
+      - sudo-plugin-python
+      #- sudo-policy-wheel-auth-self # dont need no policy...
+  tags:
+    - zypper
+    # home # i mean... it adds the wheel group?
+
+- name: add the first user to wheel
+  user:
+    name: main_user
+    state: present
+    append: true
+    groups: wheel
+
+- name: add a new sudo rule
+  copy:
+    src: sudoers-crazy
+    dest: /etc/sudoers.d/12-crazy-wheel
+    mode: '0440'
+    force: true
+    owner: root
+    group: root
+  notify: reboot
+
+- name: add a polkit rule for GNOME # im not sure if its relevant for servers but whatever
+  copy:
+    src: polkit-rule
+    dest: /etc/polkit-1/rules.d/32-gnome-wheel.rules
+    backup: false
+    owner: root
+    group: root
+    force: true
+    mode: '0640'

@@ -1,0 +1,5 @@
+// from 'opensuse-server-postintall role' :)
+
+polkit.addAdminRule(function(action, subject) {
+    return ["unix-group:wheel"];
+});

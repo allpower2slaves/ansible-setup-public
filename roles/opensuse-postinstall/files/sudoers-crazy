@@ -1,0 +1,3 @@
+Defaults !targetpw
+Defaults:%wheel !targetpw
+%wheel ALL = (ALL) ALL

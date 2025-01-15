@@ -93,6 +93,28 @@ media.
 + `kefir` -- install additional packages like `python3-psutil` and other
   libraries (defaults to `true`)
 
+### opensuse-postinstall
+Role intented for execution after installing OpenSUSE. Originally it was
+intended and tested for use right after installing OpenSUSE Leap 15.6 with "Server" System
+Role in default(-ish) configuration. 
+
+This role will pull `zypper-up` role as a dependency -- after testing it became
+apparent that installing and setting up SELinux-related software without
+upgrading and changing package vendors (in case with Leap 15.6) would break the
+system.
+
+**WARNING:** If you set `selinux_setup` to `true`, please ensure that your
+`reboot_timeout` value in `reboot` handler is set to adequate value, because
+SELinux relabeling can take a lot of time.
+
+#### Variables
++ `sudo_wheel` -- set up `sudo`. (like in other Linux distributions) (defaults to `true`)
++ `main_user` -- user that will be added in `wheel` group. (defaults to `{{ ansible_user_id }}`)
++ `disable_root` -- disable `root` account login. (defaults to `true`)
++ `selinux_setup` -- setup SELinux. It will enforce `targeted` policy.
++ `skip_dependencies` -- if `true`, dont execute required roles like
+  `zypper_up`. (defaults to `false`)
+
 ## Tags
 
 | tag          | desc                                           |
@@ -102,7 +124,8 @@ media.
 | rpmfusion    | rpmfusion setup                                |
 | git          | git stuff :)                                   |
 | gpu          | codecs/drivers                                 |
-| dnf          | dnf package installations (personal)           |
+| dnf          | dnf package manager                            |
+| zypper       | zypper package manager                         |
 | ssh          | ssh-related stuff                              |
 | flatpak      | flatpak operations (personal)                  |
 | flathub      | flathub setup                                  |

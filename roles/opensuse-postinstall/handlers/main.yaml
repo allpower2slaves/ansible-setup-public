@@ -1,0 +1,11 @@
+---
+- name: grub2-mkconfig
+  command:
+    grub2-mkconfig -o /boot/grub2/grub.cfg
+  notify: reboot
+  tags:
+    - reboot
+
+- name: reboot
+  debug:
+    msg: "HELLO WORLD"

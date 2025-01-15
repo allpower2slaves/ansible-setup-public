@@ -1,0 +1,36 @@
+--- # scrapped file... maybe one day i will actually do it
+- name: get information about services
+  service_facts:
+
+- name: disable unecessary services
+  systemd:
+    state: stopped
+    enabled: false
+    name: cups # i mean... the default installation is pretty slim in that regard
+
+- name: remove unnecessary packages (no)
+  zypper:
+    name:
+      - augeas-lenses
+      - google-opensans-fonts
+      - adobe-sourcesanspro-fonts
+      - initviocons
+      - numactl
+      - system-user-tftp
+      - cups
+      - patterns-yast-yast2_basis
+
+- name:
+
+
+
+# packagelist... not touching the kernel firmware packages thoe
+# this packagelist is guaranteed to nuke yast2
+
+
+
+#fillup -- dont touch it... half the yast and man depends on it
+
+
+
+# without deps cleaning

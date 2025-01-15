@@ -1,0 +1,62 @@
+# it doesnt work
+
+- when: 0 > 32
+  block:
+
+  # BIG thanks to https://stackoverflow.com/a/78351311
+  - name: Enable SELinux in GRUB i
+    ansible.builtin.replace:
+      path: /etc/default/grub
+      regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT="(?:(?!\s*{{ option | regex_escape }}=).)*)([ ]{{ option | regex_escape }}=\w+[ ])?[ ]?(?:{{ option | regex_escape }}=\S+)?(.*\s*\")$'
+      replace: '\1 {{ option }}={{ value }}\3'
+      backup: true
+    vars:
+      option: security
+      value: 'selinux ' # LEAVE THE TRAILING SPACE
+
+  - name: Enable SELinux in GRUB ii
+    ansible.builtin.replace:
+      path: /etc/default/grub
+      regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT="(?:(?!\s*{{ option | regex_escape }}=).)*)([ ]{{ option | regex_escape }}=\w+[ ])?[ ]?(?:{{ option | regex_escape }}=\S+)?(.*\s*\")$'
+      replace: '\1 {{ option }}={{ value }}\3'
+      backup: false         # i mean.... it was made the first time.... besides... you have
+    vars:
+      option: selinux
+      value: 1
+
+  tags:
+    - security
+
+- block:
+  - name: editing sudoers zero
+    ansible.builtin.lineinfile:
+      path: /etc/sudoers
+      line: '{{ main_user }} ALL=(ALL:ALL) ALL'
+      create: yes
+      validate: /usr/sbin/visudo -cf %s
+
+  - ansible.builtin.meta: reset_connection
+
+  - name: editing sudoers i
+    ansible.builtin.lineinfile:
+      path: /etc/sudoers
+      search_string: '# %wheel ALL=(ALL:ALL) ALL'
+      line: '%wheel ALL=(ALL:ALL) ALL'
+      validate: /usr/sbin/visudo -cf %s
+
+  - name: editing sudoers ii
+    ansible.builtin.lineinfile:
+      path: /etc/sudoers
+      search_string: 'ALL   ALL=(ALL) ALL'
+      line: '#ALL   ALL=(ALL) ALL'
+      validate: /usr/sbin/visudo -cf %s
+
+  - name: editing sudoers iii
+    ansible.builtin.lineinfile:
+      path: /etc/sudoers
+      search_string: 'Defaults targetpw'
+      line: '#Defaults targetpw'
+      validate: /usr/sbin/visudo -cf %s
+
+  tags: never
+  when: 0 > 23

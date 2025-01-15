@@ -1,0 +1,117 @@
+---
+- when: ansible_facts['distribution'] != "openSUSE Tumbleweed" # is slowroll even out yet
+  block: # add SELinux repository and install necessary stuff on leap
+
+   #TODO: change hardcoded version thing.... i mean in OpenSUSE 16.0 this thing might not be needed
+   # and leap 15.6 is the last one in 15.x family...
+
+  - name: Print out the warning
+    debug:
+      msg: "WARNING: reboot timeout is unset or too low"
+    when: (reboot_timeout|default(10)|int) < 360
+
+  - name: Add SELinux repository    # tested on OpenSUSE Leap 15.6... maybe 16.0 will change things
+    community.general.zypper_repository:
+      repo: 'https://download.opensuse.org/repositories/security:/SELinux/15.6/security:SELinux.repo'
+      auto_import_keys: true
+      priority: 90
+    tags:
+      - zypper
+      - security
+
+  - name: Install SELinux-related packages
+    zypper:
+      allow_vendor_change: true
+      force: true
+      disable_recommends: false
+      force_resolution: true
+      state: present
+      name:
+        - audit
+        - selinux-tools
+        - selinux-policy-targeted
+        - selinux-policy-devel
+        - selinux-autorelabel
+        - container-selinux
+        - restorecond
+        - policycoreutils
+        - setools-console
+        - python3-selinux
+        - python311-selinux
+    tags:
+      - zypper
+      - security
+    notify:
+      - reboot
+      # didnt install cockpit-selinux thoe...
+
+
+- block:
+  # big thanks to https://stackoverflow.com/a/77051361
+  # and https://forum.ansible.com/t/solved-replace-three-strings-in-one-line/9620/5
+
+  - name: Disable AppArmor in GRUB
+    become: true
+    ansible.builtin.replace:
+      path: /etc/default/grub
+      regexp: "{{ item.key }}"
+      replace: "{{ item.value }}"
+    loop:
+      - key: "security=apparmor" # regex lvl 100 TODO
+        value: ""
+    notify:
+      - grub2-mkconfig
+      #- reboot
+
+
+  - name: Enable SELinux in 'GRUB_CMDLINE_LINUX_DEFAULT'
+    ansible.builtin.replace:
+      path: /etc/default/grub
+      # Sometimes the file contains multiple `=` characters, this regular expression allows this.
+      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT[=]+"((:?(?!{{ item.name | regex_escape }}={{ item.value | regex_escape }}).)*?)"$'
+      replace: 'GRUB_CMDLINE_LINUX_DEFAULT="\1 {{ item.name }}={{ item.value }}"'
+    loop: "{{ grub_cmdline_linux }}"
+    vars:
+      grub_cmdline_linux:
+        - name: security
+          value: selinux
+        - name: selinux
+          value: 1
+    register: selinux_virgin # maybe make it a notifier?
+    notify:
+      - grub2-mkconfig
+      #- reboot
+
+  tags:
+    - security
+
+- name: create `/.autorelabel`  # actually this thing exits
+  file:                         # but doing this just in case
+    path: /.autorelabel
+    state: touch
+  when: selinux_virgin.changed
+  notify:
+    - reboot
+  tags:
+    - security
+
+- name: enable auditd
+  systemd_service:
+    name: auditd
+    enabled: true
+  notify: reboot
+  tags:
+    - security
+
+- name: flush all handlers and reboot
+  ansible.builtin.meta: flush_handlers
+  tags:
+    - reboot
+
+- name: set enforcing mode in SELinux
+  selinux:
+    policy: targeted
+    state: enforcing
+  notify: reboot
+  tags:
+    - reboot

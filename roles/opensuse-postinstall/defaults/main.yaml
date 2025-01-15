@@ -1,0 +1,19 @@
+sudo_wheel: true # set up sudo and users
+main_user: "{{ ansible_user_id }}" # the uid 1000
+
+disable_root: true # disable root
+
+selinux_setup: true # set up selinux
+
+skip_dependencies: false
+
+# WIP
+install_packages: true # install packages
+
+setup_packman: true # WIP
+hardware_setup: true # WIP
+force_nvidia: false # WIP
+
+firewalld_setup: true # not currently in use
+
+snapper_tweak: false # not currently in use

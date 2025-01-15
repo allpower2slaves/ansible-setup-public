@@ -1,0 +1,31 @@
+---
+- block: # generic -- both server and desktop
+  - import_tasks:
+      file: sudo-setup.yaml
+    notify: reboot
+    when: sudo_wheel
+    tags:
+      - home
+      - security
+      - postinstall
+
+- name: disable root account
+  user:
+    name: root
+    password: '!'
+  when: disable_root
+  tags:
+    - home
+    - security
+    - postinstall
+
+- name: setup SELinux
+  import_tasks:
+    file: setup-selinux.yaml
+  when: selinux_setup
+  tags:
+    - security
+    - experimental
+    - postinstall
+
+#- block: # desktop only -- installs codecs and drivers TODO

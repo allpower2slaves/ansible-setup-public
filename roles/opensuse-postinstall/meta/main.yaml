@@ -1,0 +1,8 @@
+---
+dependencies:   # without upgrade/library switch the system will just break itself
+  - role: zypper-up
+    vars:
+      allow_vendor_change: true
+      dist_upgrade: true
+      no_recommends: false
+      zypper_up: true
