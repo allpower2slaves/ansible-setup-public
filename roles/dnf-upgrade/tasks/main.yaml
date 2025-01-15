@@ -1,26 +1,20 @@
 ---
-- name: Upgrade the system
-  dnf:
-    name: "*"
-    state: latest
+# since `dnf offline-upgrade download` and `dnf upgrade --downloadonly`
+# apparently DONT share their cachedir and i dont want to add more cruft i just
+# split these methods into two tasklists
+
+- import_tasks:
+    file: upgrade-classic.yaml
+  when: mode != "offline-upgrade"
   tags:
     - dnf
     - upgrade
 
-
-- name: Check if reboot required
-  command: 'sudo dnf needs-restarting -r'
-  register: dnf_upgrade_reboot_required
-  ignore_errors: true
-  changed_when: dnf_upgrade_reboot_required.rc != 0
-  failed_when: false
+- import_tasks:
+    file: upgrade-offline.yaml
+  when: mode == "offline-upgrade"
   tags:
     - dnf
+    - upgrade
     - reboot
-  notify: "reboot"
-
-- name: Force flush
-  meta: flush_handlers
-  when: reboot_force
-  tags:
-    - reboot
+    - experimental

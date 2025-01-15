@@ -1,0 +1,39 @@
+---
+- name: offline-upgrade FETCH
+  command: dnf offline-upgrade download -y
+  register: dnf_offline_fetch
+  changed_when: "'Nothing to do.' not in dnf_offline_fetch.stdout"
+  failed_when: dnf_offline_fetch.rc > 0
+
+# meta: flush all handlers
+
+- block:            # ansible pro strats
+  - name: offline-upgrade REBOOT
+    command:
+      cmd: dnf offline-upgrade reboot
+    async: 60
+    poll: 0
+    when: dnf_offline_fetch.changed
+
+  - name: waiting...
+    pause:
+      seconds: "{{ reboot_timeout | int }}"
+
+  - name: Try to reconnect
+    command: /bin/true
+    register: dnf_host_online
+    retries: 60
+    delay: 10
+    until: dnf_host_online.rc == 0
+    changed_when: false
+
+
+
+
+# name: offline-upgrade REBOOT
+# reboot:
+#   reboot_timeout: post_reboot_delay | int
+#   connect_timeout: post_reboot_delay | int
+#   post_reboot_delay: post_reboot_delay | int
+#   reboot_command: dnf offline-upgrade reboot
+# when: dnf_offline_fetch.changed
