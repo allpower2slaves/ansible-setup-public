@@ -22,9 +22,10 @@
     - flatpak
     - personal
 
-- import_tasks: # apply my hacks
+- import_tasks: # apply my system-level tweaks
     file: iamcrazy.yaml
   when: apply_nifty_hacks
+  become: true    # explicit become because... reasons
   tags:
     - experimental # duh...
     - personal

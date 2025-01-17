@@ -91,6 +91,7 @@
       - fastfetch
       - vrms-rpm
       - rbanffy-3270-fonts
+      - ptyxis
     state: present
 
 # do i really need git-lfs?
