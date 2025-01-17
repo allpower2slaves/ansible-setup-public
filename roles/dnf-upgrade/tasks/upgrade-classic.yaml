@@ -1,0 +1,45 @@
+---
+- name: Upgrade the packages the regular way
+  dnf:
+    name: "*"
+    state: latest
+  when: mode == "upgrade"
+  tags:
+    - dnf
+    - upgrade
+
+- name: Install only security-related updates
+  dnf:
+    name: "*"
+    state: latest
+    security: true
+  when: mode == "security"
+  tags:
+    - dnf
+    - upgrade
+    # security -- i mean... every upgrade is a security thing then :)
+
+- name: Check if reboot required
+  command: 'sudo dnf needs-restarting -r'
+  register: dnf_upgrade_reboot_required
+  ignore_errors: true
+  changed_when: dnf_upgrade_reboot_required.rc != 0
+  failed_when: false
+  when: not suppress_reboot
+  tags:
+    - dnf
+    - reboot
+  notify: reboot
+
+# scrapped -- this wasnt idempotent at all
+#- name: Fetch the new packages
+#dnf:
+#name: "*"
+#state: latest
+#download_only: true
+#when: 0 > 2
+#register: dnf_downloaded
+#tags:
+#- dnf
+#- upgrade
+#- never

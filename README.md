@@ -68,10 +68,18 @@ Upgrade your system with `zypper` package manager.
 Role for stuff that is related to `dnf` package manager system upgrade process.  
 
 #### Variables
-+ `dnf_upgrade` -- run `dnf upgrade`. If set to `false` the role will skip
-  upgrade process and check for reboot necessity.  (defaults to `true`)
-+ `reboot_force` -- if reboot is necessary, flush all handlers (including
-  `reboot` reboot) (defaults to `false`)
++ `suppress-reboot` -- if `true`, do not notify `reboot` handler no matter what.
+  (defaults to `false`)
++ `mode` -- sets how you would update your system. there are three modes:
+    + `upgrade` -- just upgrade your system and then check for reboot necessity
+      and notify `reboot`. **default variable for `mode`**;
+    + `security` -- same thing as `upgrade`, but fetch and install only
+      security-related upgrades;
+    + `check-reboot` -- dont upgrade your system, just check for reboot
+      necessity and notify `reboot`;
+    + `offline-upgrade` -- do a `dnf offline-upgrade` operation.
+    **WARNING:** experimental feature, please set `reboot_timeout` variable to
+    have adequate amount of seconds for upgrade process to finish.
 
 ### flathub-setup
 Role for adding Flathub remote (repository) to system installation. *NOTE: this role

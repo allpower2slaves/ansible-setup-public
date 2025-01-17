@@ -1,3 +1,13 @@
-dnf_upgrade: true # actually run dnf upgrade
-reboot_force: false # flush all notifiers
-reboot_timeout: 180 # should be globally set...
+# mode can be multiple things:
+
+# + `upgrade` -- just upgrade the system and then check for reboot (default)
+# + `check-reboot` -- just check for reboot and notify the thing
+# + `offline-upgrade` -- download the update and then reboot. it forces the flush_handlers and  reboot so be careful
+# + `security` -- only install security updates
+
+mode: upgrade
+
+suppress_reboot: false # if true, dont check reboot
+
+# does this thing need downloadonly mode?
+#I mean i tried running dnf module with it and it wasnt idempotent...
