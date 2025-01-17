@@ -1,3 +1,7 @@
 - name: reboot
   include_tasks:
     file: tasks/reboot.yaml
+
+- name: relogin
+  debug:
+    msg: "Please, restart your user session to apply new settings"
