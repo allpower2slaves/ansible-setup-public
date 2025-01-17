@@ -1,0 +1,16 @@
+---
+# reusable tasklist to disable GNOME software autoupdates and other cruft
+# actually i did it on a system-level as a default via a drop-in config, but
+# current users would still have these variables
+
+- name: set up GNOME software (again)
+  dconf:
+    key: "/org/gnome/software/{{ keyloop }}"
+    #state: absent       # just reset the damn thing?
+    state: present
+    value: "false"
+  loop:
+    - check-updates
+    - first-run
+  loop_control:
+    loop_var: keyloop
