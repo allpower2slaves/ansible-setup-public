@@ -1,0 +1,46 @@
+---
+# booleans are ok without any wrapping, you can add ' to be 100% sure thoe...
+# string variables should be wrapped like "'string'"
+# string arrays should be wrapped like "['value', 'value']
+
+- name: dconf reference setup REAL
+  dconf:
+    key: "/org/gnome/nautilus/preferences/{{ item.key }}"
+    value: '{{ item.value }}'
+    state: present
+  loop: "{{ dconf_loop | dict2items }}"
+  vars:
+    dconf_loop:
+      default-folder-viewer: "'icon-view'"  # strings should be wrapped in "'
+      default-sort-in-reverse-order: true # booleans should be wrapped in ' or without any wrapping
+      default-sort-order: "'mtime'"
+      migrated-gtk-settings: 'true'
+      search-filter-time-type: "'last_modified'"
+
+- name: dconf reference setup REAL ONELINE
+  dconf:
+    key: "{{ item.key }}"
+    value: '{{ item.value }}'
+    state: present
+  loop:
+    - { key: '/org/gnome/desktop/interface/clock-format', value: "'24h'" }         # strings should be covered in ""
+    - { key: '/org/gnome/desktop/peripherals/mouse/accel-profile', value: "'flat'" } # booleans should be covered in ''
+    - { key: '/org/gnome/desktop/privacy/report-technical-problems', value: false}
+    - { key: '/org/gnome/mutter/attach-modal-dialogs', value: false}
+    - { key: '/org/gnome/desktop/search-providers/disabled', value: "['org.mozilla.firefox.desktop', 'org.gnome.Software.desktop']" }
+    - { key: '/org/gnome/shell/extensions/caffeine/show-notifications', value: false}
+
+- name: dconf reference setup MSG # OBSOLETE
+  ansible.builtin.debug:
+    msg: "{{ item.key }} = {{ item.value }}"
+  loop: "{{ dconf_loop | dict2items }}"
+  vars:
+    dconf_loop:
+      default-folder-viewer: "'icon-view'"
+      default-sort-in-reverse-order: "true"
+      default-sort-order: "'mtime'"
+      migrated-gtk-settings: "true"
+      search-filter-time-type: "'last_modified'"
+  tags:
+    - never
+
