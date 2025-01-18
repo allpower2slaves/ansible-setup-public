@@ -10,3 +10,8 @@
   systemd_service:
     state: restarted # i think its not 'reloaded'
     name: sshd
+
+- name: fc-cache
+  command:
+    cmd: fc-cache
+  ignore_errors: true

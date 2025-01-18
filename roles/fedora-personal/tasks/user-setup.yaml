@@ -4,12 +4,6 @@
 - name: manage my user-local configuration :)
   become_user: "{{ main_user }}"
   block:
-    - name: set UK time format
-      community.general.dconf:
-        key: "/system/locale/region"
-        value: "'en_GB.UTF-8'"
-        state: present
-
     - name: fetch podman container images
       tags:
         - podman
@@ -34,6 +28,7 @@
         - ~/Pictures/funni
         - ~/Pictures/wallpapers
         - ~/Videos/funni
+        - ~/.local/share/fonts
 
     - name: create directories with CoW disabled
       file:
@@ -46,6 +41,16 @@
         - ~/Downloads/torrent
         - ~/Videos/torrent
         - ~/Music/torrent
+
+    - name: download and install Spleen font
+      unarchive:
+        remote_src: true
+        src: 'https://github.com/fcambus/spleen/releases/download/2.1.0/spleen-2.1.0.tar.gz'
+        dest: ~/.local/share/fonts/
+        include: ["*.otf", "*.otb"]
+      retries: 5
+      delay: 10
+      notify: fc-cache
 
     - name: fetch git repos with configs :)
       git:
@@ -98,5 +103,6 @@
       tags:
         - podman
         - latex # do i even need this tag at all
+        - never # i dont care.... i dont care................. :)
 
 # end of block
