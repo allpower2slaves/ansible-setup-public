@@ -40,8 +40,8 @@ this one as well. Role was made with default Fedora Workstation (the one with GN
   and `flathub-setup`. (defaults to `false`)
 + `setup_home` -- set up additional users/groups and manage `$HOME` for users.
   (defaults to `true`)
-+ `apply_dconf` -- apply GNOME settings from `dotfiles` repository.
-  (defaults to `false`) **WARNING: not idempotent**
++ `gnome_setup` -- apply GNOME/dconf settings for `main_user`.
+  (defaults to `true`)
 
 ### fedora-workstation-setup
 This role is deprecated and its functionality was split between multiple roles.

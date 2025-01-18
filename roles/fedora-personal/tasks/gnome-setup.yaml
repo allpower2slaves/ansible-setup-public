@@ -1,0 +1,173 @@
+---
+# my GNOME settings ported from `dconf dump /`
+# it maybe better to store them in vars, however i still dont know how to store
+# them, because they are grouped in their dir
+# maybe i could just port if from `gsettings list-recursively`
+# still, i believe this thing is more readable? and doesnt require repeating stuff like
+# `/org/gnome/nautilus/preferences` 5 times
+
+# booleans are ok without any wrapping, you can add ' to be 100% sure thoe...
+# string variables should be wrapped like "'string'"
+# string arrays should be wrapped like "['value', 'value']
+
+- name: GNOME dconf setup -- locale
+  dconf:
+    key: "/system/locale/region"
+    value: "'en_GB.UTF-8'"
+    state: present
+ 
+- name: GNOME dconf setup -- nautilus
+  dconf:
+    key: "/org/gnome/nautilus/preferences/{{ item.key }}"
+    value: '{{ item.value }}'
+    state: present
+  loop: "{{ dconf_loop | dict2items }}"
+  vars:
+    dconf_loop:
+      default-folder-viewer: "'icon-view'"  # strings should be wrapped in "'
+      default-sort-in-reverse-order: true # booleans should be wrapped in ' or without any wrapping
+      default-sort-order: "'mtime'"
+      migrated-gtk-settings: 'true'
+      search-filter-time-type: "'last_modified'"
+
+- name: GNOME dconf setup -- input-sources
+  dconf:
+    key: "/org/gnome/desktop/input-sources/{{ item.key }}"
+    value: '{{ item.value }}'
+    state: present
+  loop: "{{ dconf_loop | dict2items }}"
+  vars:
+    dconf_loop:
+      mru-sources: "[('xkb', 'us'), ('xkb', 'ru')]"
+      sources: "[('xkb', 'us'), ('xkb', 'ru')]"
+      xkb-options: "['caps:none']"
+
+- name: GNOME dconf setup -- media-handling
+  dconf:
+    key: "/org/gnome/desktop/media-handling/{{ item.key }}"
+    value: '{{ item.value }}'
+    state: present
+  loop: "{{ dconf_loop | dict2items }}"
+  vars:
+    dconf_loop:
+      automount: false
+      automount-open: false
+      autorun-never: true
+
+- name: GNOME dconf setup -- software >:(
+  dconf:
+    key: "/org/gnome/software/{{ item.key }}"
+    value: '{{ item.value }}'
+    state: present
+  loop: "{{ dconf_loop | dict2items }}"
+  vars:
+    dconf_loop:
+      download-updates: false
+      first-run: false
+
+- name: GNOME dconf setup -- oneliners # for oneliners
+  dconf:
+    key: "{{ item.key }}"
+    value: '{{ item.value }}'
+    state: present
+  loop:
+    - { key: '/org/gnome/desktop/interface/clock-format', value: "'24h'" }         # strings should be covered in ""
+    - { key: '/org/gnome/desktop/peripherals/mouse/accel-profile', value: "'flat'" } # booleans should be covered in ''
+    - { key: '/org/gnome/desktop/privacy/report-technical-problems', value: false }
+    - { key: '/org/gnome/desktop/search-providers/disabled', value: "['org.mozilla.firefox.desktop', 'org.gnome.Software.desktop']" }
+    - { key: '/org/gnome/desktop/wm/preferences/resize-with-right-button', value: true }
+    - { key: '/org/gnome/mutter/attach-modal-dialogs', value: false}
+    - { key: '/org/gnome/shell/extensions/caffeine/show-notifications', value: false }
+    - { key: '/org/gnome/system/location/enabled', value: false }
+    - { key: '/org/gnome/tweaks/show-extensions-notice', value: false }
+
+- name: GNOME dconf setup -- reset options # todo: track down this alt tab thing it was enabled on something
+  dconf:
+    key: "{{ item }}"
+    state: absent
+  loop:
+    - '/org/gnome/desktop/wm/preferences/focus-mode'
+    - '/org/gnome/shell/app-switcher/current-workspace-only'
+    - '/org/gnome/mutter/experimental-features'
+
+- block: # custom shortcuts
+  - name: GNOME dconf setup -- shortcuts init # if youre reading this -- have a nice day :)
+    dconf:
+      key: '/org/gnome/settings/daemon/plugins/media-keys/custom-keybindings'
+      value: "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']"
+      state: present
+
+  - name: GNOME dconf setup -- shortcuts -- nautilus
+    dconf:
+      key: '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/{{ item.key }}'
+      value: '{{ item.value }}'
+      state: present
+    loop: "{{ dconf_loop | dict2items }}"
+    vars:
+      dconf_loop:
+        binding: "'<Super>e'"
+        command: "'nautilus'"
+        name: "'nautilus'"
+
+  - name: GNOME dconf setup -- shortcuts -- ghostty
+    dconf:
+      key: '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/{{ item.key }}'
+      value: '{{ item.value }}'
+      state: present
+    loop: "{{ dconf_loop | dict2items }}"
+    vars:
+      dconf_loop:
+        binding: "'<Control><Alt>t'"
+        command: "'ghostty'"
+        name: "'ghostty'"
+
+  - name: GNOME dconf setup -- shortcuts -- ptyxis
+    dconf:
+      key: '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/{{ item.key }}'
+      value: '{{ item.value }}'
+      state: present
+    loop: "{{ dconf_loop | dict2items }}"
+    vars:
+      dconf_loop:
+        binding: "'<Control><Alt>y'"
+        command: "'ptyxis'"
+        name: "'ptyxis'"
+
+# END of BLOCK
+
+- block: # ptyxis setup
+  - name: GNOME dconf setup -- ptyxis -- add profile
+    dconf:
+      key: '/org/gnome/Ptyxis/Profiles/20ebeed33373e7719c406cee675eaac9/{{ item.key }}'
+      value: '{{ item.value }}'
+    loop: "{{ dconf_loop | dict2items }}"
+    vars:
+      dconf_loop:
+        bold-is-bright: false
+        custom-command: "'fish'"
+        label: "'second-term'"
+        login-shell: false
+        palette: "'solarized'"
+        use-custom-command: true
+
+  - name: GNOME dconf setup -- ptyxis -- global config
+    dconf:
+      key: '/org/gnome/Ptyxis/{{ item.key }}'
+      value: '{{ item.value }}'
+    loop: "{{ dconf_loop | dict2items }}"
+    vars:
+      dconf_loop:
+        default-columns: 60 # it was uint32...
+        default-profile-uuid: "'20ebeed33373e7719c406cee675eaac9'"
+        default-rows: 20  # it was uint32...
+        font-name: "'Spleen 16x32 Bold 12'"
+        interface-style: "'dark'"
+        profile-uuids: "['20ebeed33373e7719c406cee675eaac9']"
+        restore-session: false
+        restore-window-size: false
+        use-system-font: false
+        #window-size: "(uint32 60, uint32 20)"
+
+  # name: GNOME dconf setup -- ptyxis -- misc
+
+# END of BLOCK

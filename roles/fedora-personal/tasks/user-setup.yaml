@@ -71,13 +71,19 @@
         - fish
         - ghostty
 
-    - name: (dirty) apply generic cross-system GNOME settings # its not idempotent!!
+    - name: apply GNOME setup
+      include_tasks:
+        file: gnome-setup.yaml
+      when: setup_gnome
+
+    - name: (dirty) apply generic cross-system GNOME settings # DEPRECATED
       shell:
         cmd: |
           dconf load / < ~/Desktop/github/dotfiles/gnome-setup.dconf
-      when: apply_dconf
+      when: 0 > 32
       tags:
         - experimental
+        - never
 
     - name: Make fedora-based texlive container for distrobox # maybe i should switch to alpine?
       containers.podman.podman_image:
