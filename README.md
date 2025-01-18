@@ -29,7 +29,7 @@ this one as well. Role was made with default Fedora Workstation (the one with GN
 
 #### Variables
 + `main_user` -- first user after successfully installing Fedora Workstation.
-  In this case that would be me. (defaults to `sehnsucht`)
+  In this case that would be me. (defaults to `{{ ansible_default_id }}`)
 + `apply_nifty_hacks` -- install stuff udev rules, system-level GNOME defaults
   and many more configs. (defaults to `true`)
 + `install_packages` -- install and remove packages with `dnf` package manager.
