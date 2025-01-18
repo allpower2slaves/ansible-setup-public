@@ -50,7 +50,7 @@
     - name: fetch git repos with configs :)
       git:
         clone: true
-        force: true
+        force: false # idk... do it yourself
         update: true
         repo: https://github.com/allpower2slaves/dotfiles.git
         dest: ~/Desktop/github/dotfiles
@@ -62,7 +62,7 @@
       file:
         src: "~/Desktop/github/dotfiles/{{ item }}"
         dest: "~/.config/{{ item }}"
-        force: true
+        force: false    # nah :)))))
         state: link
       ignore_errors: true     # why? because symlinking may literally fail. i dont want to force rm firectories with ansible :)
       loop:
