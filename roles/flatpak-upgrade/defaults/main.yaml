@@ -1,0 +1,4 @@
+flush_handlers: true # if false, dont flush handlers at the beginning
+
+# why would you want that? because when you upgrade your nvidia drivers and
+# dont reboot, flatpak will not install the newer nvidia runtimes
