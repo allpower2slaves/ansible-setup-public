@@ -33,7 +33,7 @@
 - name: GNOME dconf setup -- input-sources
   dconf:
     key: "/org/gnome/desktop/input-sources/{{ item.key }}"
-    value: '{{ item.value }}'
+    value: '{{ item.value | string }}'  # so string here was needed after all....
     state: present
   loop: "{{ dconf_loop | dict2items }}"
   vars:
