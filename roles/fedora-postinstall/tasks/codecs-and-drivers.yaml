@@ -16,7 +16,7 @@
     msg: "{{ gpu }}"
 
 # nvidia block
-- when: gpu  == "nvidia" or nvidia_force # TODO: test this thing
+- when: gpu  == "nvidia" or force_nvidia # TODO: test this thing
   block:
   - name: Install NVIDIA proprietary driver and applications
     dnf:
