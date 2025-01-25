@@ -23,7 +23,7 @@
       - com.github.johnfactotum.Foliate
       - org.nomacs.ImageLounge
       - io.gitlab.librewolf-community
-      - tagscom.github.PintaProject.Pinta
+      - com.github.PintaProject.Pinta
   tags:
     - flatpak
     - flathub
