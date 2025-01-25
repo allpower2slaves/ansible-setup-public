@@ -3,6 +3,8 @@
   community.general.dnf_config_manager:
     name: fedora-cisco-openh264
     state: enabled
+  tags:
+    - broken
 
 - block:
   - name: Add the RPMFusion repository keys

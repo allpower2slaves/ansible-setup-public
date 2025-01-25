@@ -146,6 +146,7 @@ SELinux relabeling can take a lot of time.
 | personal     | custom setup :)                                |
 | latex        | latex setup (will download 5+ GB)              |
 | remove       | remove files/uninstall packages                |
+| broken       | tag for stuff that did work but now doesnt     |
 | ------------ | ---------------------------------------------- |
 | interactive  | interactive tasks                              |
 | experimental | experimental stuff, use it at your own risk    |
