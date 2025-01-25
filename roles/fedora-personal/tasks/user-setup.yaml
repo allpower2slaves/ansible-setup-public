@@ -79,7 +79,7 @@
     - name: apply GNOME setup
       include_tasks:
         file: gnome-setup.yaml
-      when: setup_gnome
+      when: gnome_setup
 
     - name: (dirty) apply generic cross-system GNOME settings # DEPRECATED
       shell:
