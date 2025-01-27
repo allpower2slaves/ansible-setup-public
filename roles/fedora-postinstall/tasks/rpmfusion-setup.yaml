@@ -1,10 +1,18 @@
 ---
-- name: enable openh264 repository
+- name: enable openh264 repository (dnf4)
   community.general.dnf_config_manager:
     name: fedora-cisco-openh264
     state: enabled
-  tags:
-    - broken
+  when: ansible_facts['distribution_major_version'] | int < 41
+
+- name: enable openh264 repository (dnf5) # very hacky solution
+  shell:
+    cmd: |
+      dnf repoinfo --json fedora-cisco-openh264 && \
+      dnf config-manager setopt fedora-cisco-openh264.enabled=1
+  register: dnf_openh264_status
+  changed_when: not ('"is_enabled":true' in dnf_openh264_status.stdout)
+  when: ansible_facts['distribution_major_version'] | int > 40
 
 - block:
   - name: Add the RPMFusion repository keys
