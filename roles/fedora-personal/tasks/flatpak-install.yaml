@@ -24,6 +24,10 @@
       - org.nomacs.ImageLounge
       - io.gitlab.librewolf-community
       - com.github.PintaProject.Pinta
+      - org.gnome.gitlab.somas.Apostrophe
+      - com.github.taiko2k.avvie
+      - io.github.vmkspv.netsleuth
+      - com.github.finefindus.eyedropper
   tags:
     - flatpak
     - flathub
