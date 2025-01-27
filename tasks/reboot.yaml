@@ -6,7 +6,7 @@
     msg: "Ansible will reconnect in {{reboot_timeout }} seconds"
     reboot_timeout: "{{ reboot_timeout }}"
   when:
-    - services['sshd.service'].status == "enabled"
+    - services['sshd.service'].status|default(false) == "enabled"
     - ansible_connection != "local"
   tags:
     - reboot
