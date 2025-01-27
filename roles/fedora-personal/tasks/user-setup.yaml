@@ -12,7 +12,6 @@
         name: "{{ item }}"
         state: present
       loop:
-        - nginx: latest # debug
         - debian:12
         - opensuse/tumbleweed:latest
         - fedora:latest
