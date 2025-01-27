@@ -46,3 +46,23 @@
   notify: reload udev
   tags:
     - experimental    # i enable it because it shouldnt break anything...
+
+- block:
+  when: steam_setup
+  ignore_errors: true
+
+  - name: create a btrfs subvol for steam games
+    community.general.btrfs_subvolume:
+      name: /opt/steam
+      state: present
+    tags:
+      - btrfs
+
+  - name: set `/opt/steam` ownership to main user
+    file:
+      path: /opt/steam
+      state: directory
+      owner: "{{ main_user }}"
+      mode: '0775'  # why second 7? because it will be used with groups
+
+# end of block
