@@ -17,15 +17,17 @@
         - fedora:latest
 
     - name: manage btrfs subvolumes in $HOME
-      community.general.btrfs_subvolume:
-        name: "{{ item }}"
+      command:
+        cmd: "btrfs subvol create {{ item }}"
       loop:
-        - ~/Music/collection    # TODO: test this thing... i doubt that `~` will work
+        - ~/Music/collection
         - ~/.local/share/libvirt/images
-      ignore_errors: true # why? because it might break if the directories already exist. fix it manually yourself :) TODO: btrfs subvol migration
+      register: btrfs_subvol_home
+      changed_when: btrfs_subvol_home.rc != 0
       tags:
         - btrfs
-        - postinstall # tagging this explicitly
+      ignore_errors: true # why? because it might break if the directories
+      #already exist. fix it manually yourself :) TODO: btrfs subvol migration
 
     - name: ensure that CoW is disabled on libvirt's `images` directory
       file:

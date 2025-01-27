@@ -1,6 +1,13 @@
 ---
 # list of packages to install and other dnf stuff
 
+- name: add my personal coprs
+  community.general.copr:
+    name: "{{ item }}"
+    state: enabled
+  loop:
+    - allpower2slaves/gnome-extensions
+
 - name: install storage utilites
   dnf:
     name:
@@ -170,6 +177,13 @@
   register: editor_swap
   changed_when: "'Nothing to do.' not in editor_swap.stdout"
 
+- name: install GNOME extensions (from my copr too :) )
+  dnf:
+    name:
+      - gnome-shell-extension-quick-lang-switch # this ones from my copr
+      - gnome-shell-extension-caffeine
+  notify: relogin
+
 - block: # install ghostty from copr
   - name: Enable Fedora copr for ghostty
     community.general.copr:
@@ -181,10 +195,6 @@
       name: ghostty
       state: present
 
-# tags:
-#   - copr
-
-
 - name: add main user to new groups
   user:
     #uid: 1000
@@ -194,6 +204,7 @@
       - libvirt
       #- vboxusers
     append: yes
+  notify: relogin
 
 - name: package removal
   dnf:

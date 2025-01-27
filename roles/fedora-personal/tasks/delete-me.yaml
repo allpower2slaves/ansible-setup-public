@@ -1,4 +1,4 @@
-# old placeholders
+# scrapped stuff
 
 # coulda use templates but whatever :)
 # todo: fix the # ANSIBLE marker blocks
@@ -29,3 +29,14 @@
         value: "prefer-dark"
         state: present
       ignore_errors: true # because it might fail in a weird way
+
+    - name: manage btrfs subvolumes in $HOME
+      community.general.btrfs_subvolume:
+        name: "{{ item }}"
+      loop:
+        - /home/"{{ main_user }}/Music/collection"   # TODO: test this thing... i doubt that `~` will work
+        - /home/"{{ main_user }}/.local/share/libvirt/images"
+      ignore_errors: true # why? because it might break if the directories already exist. fix it manually yourself :) TODO: btrfs subvol migration
+      tags:
+        - btrfs
+        - postinstall # tagging this explicitly

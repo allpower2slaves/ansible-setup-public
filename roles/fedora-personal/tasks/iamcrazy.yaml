@@ -47,9 +47,9 @@
   tags:
     - experimental    # i enable it because it shouldnt break anything...
 
-- block:
-  when: steam_setup
+- when: steam_setup
   ignore_errors: true
+  block:
 
   - name: create a btrfs subvol for steam games
     community.general.btrfs_subvolume:
