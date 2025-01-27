@@ -11,6 +11,17 @@
     state: restarted # i think its not 'reloaded'
     name: sshd
 
+- name: restart and enable libvirtd service
+  systemd:
+    name: libvirtd
+    state: restarted
+    enabled: true
+  listen:
+    - restart libvirtd
+
+  tags:
+    - virtualization
+
 - name: fc-cache
   command:
     cmd: fc-cache

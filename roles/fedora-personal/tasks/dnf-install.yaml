@@ -138,6 +138,7 @@
       - virt-install
       #- VirtualBox
     state: present
+  notify: restart libvirtd
   tags:
     - virtualization
 
@@ -193,12 +194,6 @@
       - libvirt
       #- vboxusers
     append: yes
-
-- name: start enable libvirtd service
-  systemd:
-    name: libvirtd
-    state: started
-    enabled: true
 
 - name: package removal
   dnf:
