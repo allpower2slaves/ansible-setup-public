@@ -18,9 +18,8 @@
     - dnf
     - gpu
 
-- name: install psutil library for ansible
+- name: install psutil library for ansible dconf module
   dnf:
     name: python3-psutil
     state: present
   when: kefir
-
