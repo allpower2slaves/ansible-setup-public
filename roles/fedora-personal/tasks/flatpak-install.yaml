@@ -31,6 +31,16 @@
   tags:
     - flatpak
     - flathub
+- name: also install steam flatpak
+  community.general.flatpak:
+    name: com.valvesoftware.Steam
+    state: present
+    method: system
+    remote: flathub
+  when: steam_setup
+  tags:
+    - flatpak
+    - flathub
 
 - name: remove Flatpak applications
   community.general.flatpak:

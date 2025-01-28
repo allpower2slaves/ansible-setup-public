@@ -22,6 +22,7 @@
         backup: no
         # maybe a gnome tag here....
       register: dconf_update # maybe do a notifier here?
+      notify: reboot # because GDM........................................
 
     - name: update dconf (should be a handler i think :))
       command:
@@ -52,11 +53,10 @@
   block:
 
   - name: create a btrfs subvol for steam games
-    community.general.btrfs_subvolume:
-      name: /opt/steam
-      state: present
-    tags:
-      - btrfs
+    command:
+      cmd: btrfs subvol create /opt/steam
+    register: btrfs_subvol_home
+    changed_when: btrfs_subvol_home.rc != 0
 
   - name: set `/opt/steam` ownership to main user
     file:
