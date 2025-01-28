@@ -15,11 +15,10 @@
     - personal
 
 - import_tasks:
-    file: flatpak-install.yaml
-  when: install_flatpaks
+    file: user-setup.yaml
+  when: setup_home
   tags:
-    - flathub # i mean...
-    - flatpak
+    - home
     - personal
 
 - import_tasks: # apply my system-level tweaks
@@ -31,10 +30,12 @@
     - personal
 
 - import_tasks:
-    file: user-setup.yaml
-  when: setup_home
+    file: flatpak-install.yaml
+  when: install_flatpaks
   tags:
-    - home
+    - flathub # i mean...
+    - flatpak
     - personal
+
 
     # after running this, i highly recommend to run a reboot :)
