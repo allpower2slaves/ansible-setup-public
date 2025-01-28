@@ -80,6 +80,7 @@
     - { key: '/org/gnome/shell/extensions/caffeine/show-notifications', value: false }
     - { key: '/org/gnome/system/location/enabled', value: false }
     - { key: '/org/gnome/tweaks/show-extensions-notice', value: false }
+    - { key: '/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-type', value: "'nothing'"} # WARNING -- repeated thing (check iamcrazy.yaml and its gnome defaults file)... for some reason this thing sources the default and returns "changed"
 
 - name: GNOME dconf setup -- reset options # todo: track down this alt tab thing it was enabled on something
   dconf:
@@ -89,7 +90,6 @@
     - '/org/gnome/desktop/wm/preferences/focus-mode'
     - '/org/gnome/shell/app-switcher/current-workspace-only'
     - '/org/gnome/mutter/experimental-features'
-    - '/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-type' # it is set in `iamcrazy.yaml`
 
 - block: # custom shortcuts
   - name: GNOME dconf setup -- shortcuts init # if youre reading this -- have a nice day :)
