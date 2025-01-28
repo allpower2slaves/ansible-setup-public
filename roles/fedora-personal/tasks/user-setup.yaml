@@ -97,6 +97,37 @@
         - fish
         - ghostty
 
+
+    - block: # vim-plug part
+      - name: install vim-plug (create directories)
+        file:
+          path: "{{ item }}"
+          state: directory
+        loop:
+          - ~/.local/share/nvim/site/autoload
+          - ~/.local/share/nvim/plugged/
+
+      - name: install vim-plug (curl)
+        get_url:
+          url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+          dest: ~/.local/share/nvim/site/autoload/plug.vim
+
+      - name: install vim plugins
+        git:
+          clone: true
+          force: false # because vim-plug will update em
+          update: false # i prefer to do it manually :)))
+          repo: "https://github.com/{{ item.key }}/{{ item.value }}"
+          dest: "~/.local/share/nvim/plugged/{{ item.value }}"
+        ignore_errors: true
+        loop:
+          - { key: "samjwill", value: "nvim-unception" }
+          - { key: "dhruvasagar", value: "vim-table-mode" }
+        tags:
+          - git
+
+    # end of block
+
     - name: apply GNOME setup
       include_tasks:
         file: gnome-setup.yaml
