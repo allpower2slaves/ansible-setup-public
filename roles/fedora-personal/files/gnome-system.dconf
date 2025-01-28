@@ -8,3 +8,6 @@ sources=[('xkb', 'us'), ('xkb', 'ru')]
 
 [org/gnome/desktop/privacy]
 report-technical-problems=false
+
+[org/gnome/settings-daemon/plugins/power]
+sleep-inactive-ac-type='nothing'

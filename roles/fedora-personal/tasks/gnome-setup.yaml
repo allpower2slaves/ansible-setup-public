@@ -89,6 +89,7 @@
     - '/org/gnome/desktop/wm/preferences/focus-mode'
     - '/org/gnome/shell/app-switcher/current-workspace-only'
     - '/org/gnome/mutter/experimental-features'
+    - '/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-type' # it is set in `iamcrazy.yaml`
 
 - block: # custom shortcuts
   - name: GNOME dconf setup -- shortcuts init # if youre reading this -- have a nice day :)
