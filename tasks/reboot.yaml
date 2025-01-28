@@ -2,6 +2,7 @@
 # WARNING: REQUIRES running service_fact: for collecting service facts
 
 - name: literal reboot
+  become: true  # explicit call
   reboot:
     msg: "Ansible will reconnect in {{reboot_timeout }} seconds"
     reboot_timeout: "{{ reboot_timeout }}"
