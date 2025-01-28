@@ -94,7 +94,7 @@
 - block: # custom shortcuts
   - name: GNOME dconf setup -- shortcuts init # if youre reading this -- have a nice day :)
     dconf:
-      key: '/org/gnome/settings/daemon/plugins/media-keys/custom-keybindings'
+      key: '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings'
       value: "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']"
       state: present
 
