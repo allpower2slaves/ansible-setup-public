@@ -2,9 +2,14 @@
 - name: force flush all handers
   meta: flush_handlers
   when: flush_handlers
+  tags:
+    - reboot
 
 - name: upgrade everything flatpak
   command:
     cmd: flatpak upgrade --noninteractive
   register: flatpak_upgrade_output
   changed_when: not ('Nothing to do.' in flatpak_upgrade_output.stdout)
+  tags:
+    - flatpak
+    - upgrade
