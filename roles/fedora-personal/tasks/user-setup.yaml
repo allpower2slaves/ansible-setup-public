@@ -59,9 +59,6 @@
         attributes: '+C'
       loop:
         - ~/Downloads/iso
-        - ~/Downloads/torrent
-        - ~/Videos/torrent
-        - ~/Music/torrent
 
     - name: download and install Spleen font
       unarchive:
@@ -96,6 +93,11 @@
         - mpv
         - fish
         - ghostty
+
+    - name: create a directory for quadlets (podman systemd units)
+      file:
+        path: ~/.config/containers/systemd
+        state: directory
 
 
     - block: # vim-plug part
