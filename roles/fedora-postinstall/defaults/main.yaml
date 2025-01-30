@@ -2,4 +2,6 @@ hardware_setup: true      # if true, it will install codecs and drivers
 force_nvidia: false       # if true, it will install nvidia drivers no matter what
 kefir: true         # if true, install psutil thing because ansible dconf thing will fail
 
+gnome_suspend_disable: false # if true, globally disable suspend on AC power in GNOME-related stuff (GDM too) WARNING -- its also managed by `fedora-personal` role
+
 # TODO: enable\disable rpmfusion repos?

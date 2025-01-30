@@ -23,3 +23,18 @@
     name: python3-psutil
     state: present
   when: kefir
+
+
+- when: gnome_suspend_disable
+  block:
+  - name: disable GNOME suspend on AC
+    copy:
+      src: gnome-suspend-ac
+      dest: /etc/dconf/db/local.d/11-gnome-disable-ac-suspend.dconf
+    register: dconf_update # maybe do a notifier here?
+    notify: reboot # because GDM
+
+  - name: update dconf (should be a handler i think :))
+    command:
+      cmd: dconf update
+    when: dconf_update.changed
