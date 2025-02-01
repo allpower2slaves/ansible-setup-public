@@ -107,7 +107,7 @@
     vars:
       dconf_loop:
         binding: "'<Super>e'"
-        command: "'nautilus'"
+        command: "'nautilus -w'" # `-w` for new window
         name: "'nautilus'"
 
   - name: GNOME dconf setup -- shortcuts -- ghostty
