@@ -1,0 +1,64 @@
+---
+- name: 
+  hosts: all # its ok to change it
+  become: false # dont change it. running `become: true` with `--connection localhost` will result in {{ ansible_user_id }} being root which will break some roles
+  tasks:
+
+  - name: collect all service facts     # dont remove this thing...
+    service_facts:
+    become: true
+
+    - become: true        # this block is ran as root, however some roles will have tasks that are executed by regular users
+      block:
+
+      - name: set hostname
+        hostname:
+          name: microwave
+          use: systemd
+
+      - name: create new group
+        ansible.builtin.group:
+          gid: 2000 # maybe change it to big year -- 2004
+          name: group2k
+
+      - name: append me to a new group
+        ansible.builtin.user:
+          name: "{{ item }}"
+          groups: group2k
+          append: true
+        loop:
+          - "{{ ansible_user_id }}"
+
+      - include_role:
+          name: dnf-upgrade
+
+      - meta: flush_handlers
+
+      - include_role:
+          name: fedora-personal
+        vars:
+          steam_setup: true
+
+      - name: install cowsay
+        dnf:
+          name: cowsay
+          state: present
+
+      # end of block
+
+    - become_user: "{{ ansible_user_id }}"  # block for user-local stuff
+      block:
+      - name: set GNOME accent color
+        dconf:
+          key: "/org/gnome/desktop/interface/accent-color"
+          value: "'yellow'"
+      tags:
+        - home
+        - personal
+
+    # end of block
+
+  handlers:
+    - import_tasks:
+        file: handlers/main.yaml
+      become: true
