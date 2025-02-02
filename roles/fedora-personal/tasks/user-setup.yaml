@@ -159,4 +159,13 @@
         - latex # do i even need this tag at all
         - never # i dont care.... i dont care................. :)
 
+    - name: make ssh connections set TERM to xterm-256color
+      lineinfile:
+        path: ~/.ssh/environment
+        regexp: '^TERM='
+        line: TERM=xterm-256color
+      tags:
+        - ssh
+
+
 # end of block
