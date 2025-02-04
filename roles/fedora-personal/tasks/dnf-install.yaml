@@ -43,6 +43,7 @@
     - openssl
     - monitor-edid
     - edid-decode
+    - pandoc
     state: present
 
 - name: development stuff
